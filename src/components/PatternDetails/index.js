@@ -24,7 +24,7 @@ const PatternDetails = () => {
       await favoritePattern(dispatch, currentProfile, bookInfo, externalOrInternal === "external");
       setBookInfo({...bookInfo, favoritedUsers: [...favoritedUsers, currentProfile._id]});
     } else {
-      navigate("/forbidden-access", {state: {reason: "notLoggedIn"}});
+      navigate("/forbidden-access", {state: {reason: "notLoggedIn", goBackBy: -1}});
     }
   }
 
@@ -107,7 +107,7 @@ const PatternDetails = () => {
             </div>
             <div className="col-8">
               <h3>{bookInfo.title}</h3>
-              <a href={bookInfo.link}
+              <a href={bookInfo.link} target="_blank" rel="noopener noreferrer"
                  className={`${externalOrInternal === 'external' ? '' : 'd-none'} btn btn-primary`}>View on Google Books
               </a>
               <h5 className="mt-2">Author: {bookInfo.authorId ? <a href={`/profile/${bookInfo.authorId}`}>{bookInfo.author}</a> : bookInfo.author}</h5>
@@ -115,10 +115,11 @@ const PatternDetails = () => {
               <button className={`btn btn-primary ${favorited || currentProfile?.isMaker ? 'd-none' : ''}`} onClick={handleFavorite}>Favorite Pattern</button>
               <button className={`btn btn-secondary ${favorited && !currentProfile?.isMaker ? '' : 'd-none'}`} onClick={handleUnfavorite}>Unfavorite Pattern</button>
               <button
-                  className={`btn btn-success ${currentProfile?.isMaker && bookInfo.authorId === currentProfile._id ? '' : 'd-none'}`}
+                  className={`mb-2 btn btn-success ${currentProfile?.isMaker && bookInfo.authorId === currentProfile._id ? '' : 'd-none'}`}
                   onClick={() => navigate(`/edit-pattern/${bookInfo._id}`)}>
                 Edit Pattern
               </button>
+              <br />
               <button
                   className={`btn btn-danger ${currentProfile?.isMaker && bookInfo.authorId === currentProfile._id ? '' : 'd-none'}`}
                   onClick={handleDelete}>
@@ -126,6 +127,7 @@ const PatternDetails = () => {
               </button>
             </div>
           </div>
+          <h4 className="mt-2">About This {bookInfo.external ? "Book" : "Pattern"}</h4>
           <p dangerouslySetInnerHTML={{__html: bookInfo.description}} />
           <br />
           <h5>Favorited by:</h5>

@@ -1,4 +1,3 @@
-import {useProfile} from "../../services/profile-context";
 import {useNavigate, useParams} from "react-router-dom";
 import {
   findAllPatternsForSearch
@@ -16,7 +15,6 @@ const groupBy3 = (data) => {
 };
 
 const SearchPage = () => {
-  const {currentProfile} = useProfile();
   const params = useParams();
   const search = window.location.search;
   const query = new URLSearchParams(search);
@@ -40,14 +38,9 @@ const SearchPage = () => {
     async function findPatterns() {
       await findAllPatternsForSearch(dispatch, params.criteria, filter);
     }
-
-    if (currentProfile && currentProfile.isMaker) {
-      navigate("/my-patterns");
-    } else {
-      findPatterns();
-    }
+     findPatterns();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProfile, params, filter]);
+  }, [params, filter]);
 
   useEffect(() => {
     setMyPatterns(groupBy3(patterns));
@@ -62,11 +55,14 @@ const SearchPage = () => {
 
   return (
       <div>
-        <div className="row mb-4">
-          <input className= "col-9 me-5" ref={keywordRef} type="search" defaultValue={params.criteria} placeholder="Search" />
-          <button className="col-2 ms-4 btn btn-primary" onClick={handleSearch}>Search</button>
+        <div className="row mb-2">
+          <input className= "col-9 col-lg-8 col-md-7 col-sm-6 me-5" ref={keywordRef} type="search" defaultValue={params.criteria} placeholder="Search" />
+          <button className="col-2 ms-4 btn btn-primary" onClick={handleSearch}>
+            <span className="fa-solid fa-magnifying-glass float-start w-25 mt-1" />
+            <span className="float-end d-xl-block d-lg-block d-md-block d-sm-none w-75">Search</span>
+          </button>
         </div>
-        <div className="row">
+        <div className="row mb-2">
           <div className="col-4">
             <input type="radio"
                    name="searchFilter"
@@ -74,7 +70,7 @@ const SearchPage = () => {
                    onChange={() => handleFilter(null)}
                    checked={!filter}
             />
-            <label htmlFor="all">All Results</label>
+            <label className="ms-2" htmlFor="all">All Results</label>
           </div>
           <div className="col-4">
             <input type="radio"
@@ -83,7 +79,10 @@ const SearchPage = () => {
                    onChange={() => handleFilter("external")}
                    checked={filter === "external"}
             />
-            <label htmlFor="externalOnly">Only External Results</label>
+            <label className="ms-2" htmlFor="externalOnly">
+              <span className="d-xl-block d-lg-block d-md-none d-sm-none">Only External Results</span>
+              <span className="d-xl-none d-lg-none d-md-block d-sm-block">External</span>
+            </label>
           </div>
           <div className="col-4">
             <input type="radio"
@@ -92,13 +91,16 @@ const SearchPage = () => {
                    onChange={() => handleFilter("internal")}
                    checked={filter === "internal"}
             />
-            <label htmlFor="internalOnly">Only Internal Results</label>
+            <label className="ms-2" htmlFor="internalOnly">
+              <span className="d-xl-block d-lg-block d-md-none d-sm-none">Only Internal Results</span>
+              <span className="d-xl-none d-lg-none d-md-block d-sm-block">Internal</span>
+            </label>
           </div>
         </div>
         <div>
           {myPatterns?.length > 0 ? myPatterns.map(row => row && <div className="row">
             {row.map(pattern => pattern && <div className="col-4">
-              <SearchItem
+              <SearchItem key={pattern._id}
                   title={pattern.title}
                   id={pattern._id}
                   external={pattern.external}

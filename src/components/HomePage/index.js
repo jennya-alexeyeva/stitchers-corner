@@ -41,7 +41,7 @@ const HomePage = () => {
       setMyPatterns(groupBy3(allPatterns.filter(pattern => pattern.author === currentProfile._id)));
     } else {
       // patterns that the user favorited
-      setMyPatterns(groupBy3(allPatterns.filter(pattern => pattern.favoritedUsers.includes(currentProfile._id))));
+      setMyPatterns(groupBy3(allPatterns.filter(pattern => pattern.favoritedUsers?.includes(currentProfile._id))));
     }
   }, [currentProfile, patterns])
   return (

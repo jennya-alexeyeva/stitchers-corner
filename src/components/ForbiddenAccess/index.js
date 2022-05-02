@@ -4,6 +4,7 @@ const ForbiddenAccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const reason = location.state.reason;
+  const goBackBy = location.state.goBackBy ?? -2;
   let text;
 
   if (reason === 'notMaker') {
@@ -16,7 +17,7 @@ const ForbiddenAccess = () => {
   return(
       <div>
         <h5>{text}</h5>
-        <button className="btn btn-danger" onClick={() => navigate(-1)}>Go to Previous Page</button>
+        <button className="btn btn-danger" onClick={() => navigate(goBackBy)}>Go to Previous Page</button>
       </div>
   );
 };

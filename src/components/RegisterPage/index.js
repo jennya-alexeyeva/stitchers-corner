@@ -29,13 +29,16 @@ const RegisterPage = () => {
 
   return (
       <div>
+        <h5>Sign Up</h5>
         <input ref={usernameRef} placeholder="Username" className="form-control"/>
-        <input type="password" ref={passwordRef} placeholder="Password" className="form-control"/>
+        <input type="password" ref={passwordRef} placeholder="Password" className="mb-2 form-control"/>
         <input type="radio" name="isMaker" id="notMaker" onChange={() => setIsMaker(false)} />
-        <label htmlFor="notMaker">Generic Account</label>
+        <label className="ms-1" htmlFor="notMaker">Generic Account</label>
+        <br />
         <input type="radio" name="isMaker" id="maker" onChange={() => setIsMaker(true)} />
-        <label htmlFor="maker">Pattern Maker Account</label>
-        <button onClick={handleSignUp} className="btn btn-primary">Sign Up</button>
+        <label className="ms-1" htmlFor="maker">Pattern Maker Account</label>
+        <br />
+        <button onClick={handleSignUp} className="mt-2 btn btn-primary">Sign Up</button>
       </div>
   );
 };

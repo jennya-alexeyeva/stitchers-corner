@@ -14,24 +14,25 @@ const PostPattern = () => {
   const dispatch = useDispatch();
   const [imageFile, setImageFile] = useState(null);
   const handlePostPattern = async () => {
-    let convertedImage;
-    if (imageFile) {
-      convertedImage = await Convert(imageFile);
-      if (!convertedImage) {
-        alert('Please upload a valid image.');
-        return;
-      }
-    }
     await createPattern(dispatch, {
       title: titleRef.current.value,
       price: priceRef.current.value,
       description: descriptionRef.current.value,
       author: currentProfile,
       favoritedUsers: [],
-      image: convertedImage
+      image: imageFile
     })
 
     navigate('/profile');
+  }
+
+  const verifyUpload = async (image) => {
+    let convertedImage = await Convert(image);
+    if (convertedImage) {
+      setImageFile(convertedImage);
+    } else {
+      alert('Please upload a valid image.');
+    }
   }
 
   useEffect(() => {
@@ -46,8 +47,11 @@ const PostPattern = () => {
   return (
       <div>
         <h2>Post a Pattern</h2>
-        <input type='file' id="imageFile" onChange={e => setImageFile(e.target.files[0])} />
-        <label htmlFor="imageFile">Upload a thumbnail image for your pattern. Max size 16mb</label>
+        {imageFile && <img className="thumbnail-preview" src={imageFile.toString()} alt="thumbnail"/>}
+        <div className="row mb-3 mt-2">
+          <input className="col-6" type='file' id="imageFile" onChange={e => verifyUpload(e.target.files[0])} />
+          <label className="col-6" htmlFor="imageFile">Upload a thumbnail image for your pattern. Max size 16mb</label>
+        </div>
         <input ref={titleRef} placeholder="Title" className={`form-control`}/>
         <input type="number" ref={priceRef} placeholder="Price" className={`form-control`} />
         <textarea ref={descriptionRef} placeholder="Description" className={`form-control`} />

@@ -27,20 +27,19 @@ const LoginPage = () => {
 
   return (
       <div>
-        <div>
-          <input ref={usernameRef}
-                 id="username"
-                 placeholder="Username"
-                 className={`form-control`}/>
-          <input ref={passwordRef}
-                 id="password"
-                 type="password"
-                 placeholder="Password"
-                 className="form-control" />
-          <button onClick={handleSignIn}
-                  className="btn btn-primary">Sign In</button>
-        </div>
-        <Link className="float-end" to="/register">Sign Up</Link>
+        <h5>Log In</h5>
+        <input ref={usernameRef}
+               id="username"
+               placeholder="Username"
+               className={`form-control`}/>
+        <input ref={passwordRef}
+               id="password"
+               type="password"
+               placeholder="Password"
+               className="form-control" />
+        <button onClick={handleSignIn}
+                className="mt-2 btn btn-primary">Sign In</button>
+        <Link className="float-end mt-2" to="/register">Sign Up</Link>
       </div>
   );
 }

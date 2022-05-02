@@ -59,12 +59,15 @@ const ProfilePage = () => {
             <div>
               <div className="row">
                 <div className="col-3">
-                  <img className="w-100" src={user.profilePic ?? '/images/no_pfp.png'} alt="profile pic" />
+                  <img className="profile-pic" src={user.profilePic ?? '/images/no_pfp.png'} alt="profile pic" />
                 </div>
                 <div className="col-9">
                   <div className="row flex">
-                    <h4 className="col-10">{user.username} <span className={`badge bg-primary ${user.isMaker ? '' : 'd-none'}`}>Pattern Maker</span></h4>
-                    <a href="/edit-profile" className={`col-2 btn btn-primary ${currentProfile && currentProfile._id !== user._id ? 'd-none' : ''}`}>Edit Profile</a>
+                    <h4 className="col-xl-9 col-lg-9 col-md-10 col-sm-10">{user.username} <span className={`badge bg-primary ${user.isMaker ? '' : 'd-none'}`}>Pattern Maker</span></h4>
+                    <a href="/edit-profile" className={`d-xl-block d-lg-block col-xl-3 col-lg-3 d-md-none d-sm-none btn btn-primary ${currentProfile && currentProfile._id !== user._id ? 'd-none' : ''}`}>
+                      Edit Profile</a>
+                    <a href="/edit-profile" className={`d-md-block d-sm-block d-xl-none d-lg-none col-md-2 col-sm-2 btn btn-primary ${currentProfile && currentProfile._id !== user._id ? 'd-none' : ''}`}>
+                      Edit</a>
                   </div>
                   <h5>About This User:</h5>
                   <p>{user.aboutMe}</p>

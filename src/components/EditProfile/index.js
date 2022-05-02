@@ -14,25 +14,14 @@ const EditProfile = () => {
   const [imageFile, setImageFile] = useState(null);
 
   const updateProfile = async () => {
-    let uploadedImage;
-    if (imageFile) {
-      uploadedImage = await Convert(imageFile);
-      if (!uploadedImage) {
-        alert('Please upload a valid image.');
-        return;
-      }
-    } else {
-      uploadedImage = currentProfile.profilePic;
-    }
     const newProfile = {
       ...currentProfile,
       username: usernameRef.current.value,
       password: passwordRef.current.value,
       aboutMe: aboutMeRef.current.value,
-      profilePic: uploadedImage
+      profilePic: imageFile ?? currentProfile.profilePic
     }
     updateUser(newProfile).then(async response => {
-      console.log(response);
       if (response === 409) {
         alert("This username is already taken.");
         return;
@@ -42,20 +31,34 @@ const EditProfile = () => {
     });
   }
 
+  const verifyUpload = async (image) => {
+    let convertedImage = await Convert(image);
+    if (convertedImage) {
+      setImageFile(convertedImage);
+    } else {
+      alert('Please upload a valid image.');
+    }
+  }
+
   useEffect(() => {
     if (currentProfile === null) {
       navigate('/forbidden-access', {state: {reason: "notLoggedIn"}});
     }
-  }, [currentProfile]);
+  }, [currentProfile, navigate]);
 
   return (
       <div>
         {currentProfile && <div>
-          <input type='file' onChange={e => setImageFile(e.target.files[0])} />
+          <h2>Edit Profile</h2>
+          {imageFile && <img className="thumbnail-preview" src={imageFile.toString()} alt="thumbnail"/>}
+          <div className="row mb-3 mt-2">
+            <input className="col-8" type='file' id="imageFile" onChange={e => verifyUpload(e.target.files[0])} />
+            <label className="col-4" htmlFor="imageFile">Upload a profile picture. Max size 16mb</label>
+          </div>
           <input ref={usernameRef} className="form-control" defaultValue={currentProfile.username} />
           <input ref={passwordRef} className="form-control" defaultValue={currentProfile.password} />
           <textarea ref={aboutMeRef} className="form-control">{currentProfile.aboutMe}</textarea>
-          <button className="btn btn-primary" onClick={updateProfile}>Update</button>
+          <button className="btn btn-primary mt-2" onClick={updateProfile}>Update</button>
         </div>}
       </div>
   )

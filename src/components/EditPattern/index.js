@@ -30,23 +30,21 @@ const EditPattern = () => {
     getPatternInfo();
   });
 
-  const handleUpdate = async () => {
-    let uploadedImage;
-    if (imageFile) {
-      uploadedImage = await Convert(imageFile);
-      if (!uploadedImage) {
-        alert('Please upload a valid image.');
-        return;
-      }
+  const verifyUpload = async (image) => {
+    let convertedImage = await Convert(image);
+    if (convertedImage) {
+      setImageFile(convertedImage);
     } else {
-      uploadedImage = patternInfo.image;
+      alert('Please upload a valid image.');
     }
+  }
 
+  const handleUpdate = async () => {
     await updatePattern(dispatch, {...patternInfo,
       title: titleRef.current.value,
       price: priceRef.current.value,
       description: descriptionRef.current.value,
-      image: uploadedImage
+      image: imageFile ?? patternInfo.image
     });
 
     navigate(`/details/internal/${patternInfo._id}`);
@@ -54,11 +52,14 @@ const EditPattern = () => {
 
   return (
       <div>
-        <h2>Edit </h2>
+        <h2>Edit Pattern</h2>
           {patternInfo &&
           <div>
-            <input type='file' id="imageFile" onChange={e => setImageFile(e.target.files[0])} />
-            <label htmlFor="imageFile">Upload a thumbnail image for your pattern. Max size 16mb</label>
+            {imageFile && <img className="thumbnail-preview" src={imageFile.toString()} alt="thumbnail"/>}
+            <div className="row mb-3 mt-2">
+              <input type='file' id="imageFile" onChange={e => verifyUpload(e.target.files[0])} />
+              <label htmlFor="imageFile">Upload a thumbnail image for your pattern. Max size 16mb</label>
+            </div>
             <input defaultValue={patternInfo.title} ref={titleRef} placeholder="Title" className='form-control'/>
             <input defaultValue={patternInfo.price ?? 0} type="number" ref={priceRef} placeholder="Price" className='form-control' />
             <textarea defaultValue={patternInfo.description} ref={descriptionRef} placeholder="Description" className='form-control' />
