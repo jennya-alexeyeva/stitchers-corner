@@ -106,15 +106,19 @@ const PatternDetails = () => {
               <img className="col-12" src={bookInfo.image} alt="book cover or pattern thumbnail"/>
             </div>
             <div className="col-8">
-              <p>{bookInfo.title}
-                <a href={bookInfo.link}
-                   className={`${externalOrInternal === 'external' ? '' : 'd-none'} badge bg-primary ms-2`}>View on Google Books
-                </a>
-              </p>
-              <p>{bookInfo.authorId ? <a href={`/profile/${bookInfo.authorId}`}>{bookInfo.author}</a> : bookInfo.author}</p>
-              <p>{getPrice(bookInfo.price)}</p>
+              <h3>{bookInfo.title}</h3>
+              <a href={bookInfo.link}
+                 className={`${externalOrInternal === 'external' ? '' : 'd-none'} btn btn-primary`}>View on Google Books
+              </a>
+              <h5 className="mt-2">Author: {bookInfo.authorId ? <a href={`/profile/${bookInfo.authorId}`}>{bookInfo.author}</a> : bookInfo.author}</h5>
+              <p>Price: {getPrice(bookInfo.price)}</p>
               <button className={`btn btn-primary ${favorited || currentProfile?.isMaker ? 'd-none' : ''}`} onClick={handleFavorite}>Favorite Pattern</button>
               <button className={`btn btn-secondary ${favorited && !currentProfile?.isMaker ? '' : 'd-none'}`} onClick={handleUnfavorite}>Unfavorite Pattern</button>
+              <button
+                  className={`btn btn-success ${currentProfile?.isMaker && bookInfo.authorId === currentProfile._id ? '' : 'd-none'}`}
+                  onClick={() => navigate(`/edit-pattern/${bookInfo._id}`)}>
+                Edit Pattern
+              </button>
               <button
                   className={`btn btn-danger ${currentProfile?.isMaker && bookInfo.authorId === currentProfile._id ? '' : 'd-none'}`}
                   onClick={handleDelete}>
@@ -123,9 +127,10 @@ const PatternDetails = () => {
             </div>
           </div>
           <p dangerouslySetInnerHTML={{__html: bookInfo.description}} />
-            {favoritedUsers.length === 0 ? <p>This pattern has no favorites yet. Be the first!</p> :
+          <br />
+          <h5>Favorited by:</h5>
+          {favoritedUsers.length === 0 ? <p>This pattern has no favorites yet. Be the first!</p> :
                 <div>
-                  <h5>Favorited by:</h5>
                   <ul>
                     {favoritedUsers.map(user => <li><a href={`/profile/${user._id}`}>{user.username}</a></li>)}
                   </ul>

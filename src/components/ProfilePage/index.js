@@ -62,25 +62,29 @@ const ProfilePage = () => {
                   <img className="w-100" src={user.profilePic ?? '/images/no_pfp.png'} alt="profile pic" />
                 </div>
                 <div className="col-9">
-                  <p>{user.username}</p>
+                  <div className="row flex">
+                    <h4 className="col-10">{user.username} <span className={`badge bg-primary ${user.isMaker ? '' : 'd-none'}`}>Pattern Maker</span></h4>
+                    <a href="/edit-profile" className={`col-2 btn btn-primary ${currentProfile && currentProfile._id !== user._id ? 'd-none' : ''}`}>Edit Profile</a>
+                  </div>
+                  <h5>About This User:</h5>
                   <p>{user.aboutMe}</p>
                 </div>
               </div>
+              <h3 className="mt-2">{user.isMaker ? 'Created Patterns:' : 'Favorited Patterns:'}</h3>
               <div>
                 {
-                    myPatterns && myPatterns.map(row => row && <div className="row">
+                    myPatterns ? myPatterns.map(row => row && <div className="row">
                       {row.map(pattern => pattern && <div className="col-4">
                         <SearchItem
                             title={pattern.title}
-                            id={pattern._id}
+                            id={pattern.googleBooksId ?? pattern._id}
                             external={pattern.external}
                             author={pattern.author}
                             image={pattern.image} />
                       </div>)}
-                    </div>)
+                    </div>) : <p>Loading...</p>
                 }
               </div>
-              <a href="/edit-profile" className={`btn btn-primary ${currentProfile && currentProfile._id !== user._id ? 'd-none' : ''}`}>Edit Profile</a>
             </div>
         }
       </div>

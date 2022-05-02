@@ -1,7 +1,8 @@
-import {useLocation} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 
 const ForbiddenAccess = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const reason = location.state.reason;
   let text;
 
@@ -14,7 +15,8 @@ const ForbiddenAccess = () => {
   }
   return(
       <div>
-        <p>{text}</p>
+        <h5>{text}</h5>
+        <button className="btn btn-danger" onClick={() => navigate(-1)}>Go to Previous Page</button>
       </div>
   );
 };

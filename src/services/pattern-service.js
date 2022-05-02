@@ -11,14 +11,15 @@ export const CREATE_NEW_PATTERN = 'CREATE_NEW_PATTERN';
 export const DELETE_PATTERN = 'DELETE_PATTERN';
 export const FAVORITE_PATTERN = 'FAVORITE_PATTERN';
 export const UNFAVORITE_PATTERN = 'UNFAVORITE_PATTERN';
+export const UPDATE_PATTERN = 'UPDATE_PATTERN';
 
-export const findAllPatternsForSearch = async (dispatch, keywords) => {
+export const findAllPatternsForSearch = async (dispatch, keywords, filter) => {
   let localResponse = await axios.get(`${API_PATTERN_URL}?keywords=${keywords ?? ""}`);
   const localValues = localResponse.data.map(pattern => {
     return {...pattern, external: false}
   });
   let externalResponse = await axios.get(`${GOOGLE_BOOKS_API_URL_BASE}?q=${keywords ?? ""}%20subject:"cross%20stitch"`);
-  let externalValues = externalResponse.data.items.map(book => {
+  let externalValues = externalResponse.data.items?.map(book => {
     return {
       title: book.volumeInfo.title ?? "Unknown Title",
       author: book.volumeInfo.authors?.join(", ") ?? "Unknown Author",
@@ -27,7 +28,7 @@ export const findAllPatternsForSearch = async (dispatch, keywords) => {
       external: true,
       _id: book.id
     }
-  });
+  }) ?? [];
 
   externalValues = await Promise.all(externalValues.map(async book => {
     let databaseResp = await axios.get(`${API_BOOK_URL}/${book._id}`);
@@ -39,10 +40,23 @@ export const findAllPatternsForSearch = async (dispatch, keywords) => {
     }
   }));
 
+  let returnedPatterns;
+
+  switch(filter) {
+    case "external":
+      returnedPatterns = externalValues;
+      break;
+    case "internal":
+      returnedPatterns = localValues;
+      break;
+    default:
+      returnedPatterns = localValues.concat(externalValues);
+      break;
+  }
 
   dispatch({
     type: FIND_ALL_PATTERNS,
-    patterns: localValues.concat(externalValues)
+    patterns: returnedPatterns
   })
 }
 
@@ -107,4 +121,12 @@ export const unfavoritePattern = async (dispatch, user, pattern, external) => {
     type: UNFAVORITE_PATTERN,
     pattern: response.data
   });
+}
+
+export const updatePattern = async (dispatch, pattern) => {
+  const response = await axios.put(`${API_PATTERN_URL}/update/${pattern._id}`, pattern);
+  dispatch({
+    type: UPDATE_PATTERN,
+    pattern: response.data
+  })
 }

@@ -9,8 +9,13 @@ export const findUser = async (id) => {
 }
 
 export const updateUser = async (user) => {
-  const response = await axios.put(`${API_URL}/${user._id}`, user);
-  return response.data;
+  try {
+    const response = await axios.put(`${API_URL}/${user._id}`, user);
+    console.log(response);
+    return response.data;
+  } catch (e) {
+    return e.response.status;
+  }
 }
 
 export const deleteUser = async (user) => {

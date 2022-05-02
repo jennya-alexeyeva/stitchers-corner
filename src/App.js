@@ -7,7 +7,6 @@ import './vendors/fontawesome/css/all.css';
 import MainPage from "./components/MainPage";
 import HomePage from "./components/HomePage";
 import RegisterPage from "./components/RegisterPage";
-import ForumPage from "./components/ForumPage";
 import ForbiddenAccess from "./components/ForbiddenAccess";
 import PatternDetails from "./components/PatternDetails";
 import PostPattern from "./components/PostPattern";
@@ -15,7 +14,7 @@ import ProfilePage from "./components/ProfilePage";
 import SearchPage from "./components/SearchPage";
 import {ProfileProvider} from "./services/profile-context";
 import EditProfile from "./components/EditProfile";
-
+import EditPattern from "./components/EditPattern";
 
 function App() {
   return (
@@ -29,9 +28,9 @@ function App() {
                 <Route path="edit-profile" element={<EditProfile/>} />
                 <Route path="login" element={<LoginPage/>} />
                 <Route path="register" element={<RegisterPage/>} />
-                <Route path="forum" element={<ForumPage/>} />
                 <Route path="forbidden-access" element={<ForbiddenAccess/>} />
                 <Route path="details/:externalOrInternal/:id" element={<PatternDetails/>} />
+                <Route path="edit-pattern/:id" element={<EditPattern/>} />
                 <Route path="post-pattern" element={<PostPattern/>} />
                 <Route path="profile" element={<ProfilePage/>}>
                   <Route path=":pid" />

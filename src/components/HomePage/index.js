@@ -48,6 +48,7 @@ const HomePage = () => {
       <div>
         <div className="mt-4 p-5 bg-primary text-white rounded mb-4">
           <h1>Welcome{currentProfile ? " back" : ""}, {currentProfile ? currentProfile.username : "Anonymous Stitcher"}!</h1>
+          <p>Stitcher's Corner is a social media platform that allows cross-stitchers to find and share patterns and other resources.</p>
         </div>
         <h3>{currentProfile?.isMaker ? 'Recently Posted Patterns'
             : (currentProfile ? 'Recently Favorited Patterns' : 'Recent Patterns')}</h3>
