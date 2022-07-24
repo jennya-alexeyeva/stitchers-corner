@@ -11,7 +11,6 @@ export const findUser = async (id) => {
 export const updateUser = async (user) => {
   try {
     const response = await axios.put(`${API_URL}/${user._id}`, user);
-    console.log(response);
     return response.data;
   } catch (e) {
     return e.response.status;
